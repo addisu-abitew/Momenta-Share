@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "431207330435",
+    "project_id": "momentashare",
+    "storage_bucket": "momentashare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431207330435:android:2906f5d67512975094a1b6",
+        "android_client_info": {
+          "package_name": "com.example.momenta_share"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgutb9PwAxi6WEKtJt1F8YD2nFCFBZ3ec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
