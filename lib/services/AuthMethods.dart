@@ -13,7 +13,6 @@ class AuthMethods {
     try {
       final User currentUser = _auth.currentUser!;
       final DocumentSnapshot snapshot = await _firestore.collection('users').doc(currentUser.uid).get();
-
       return UserModel.fromMap(snapshot.data() as Map<String, dynamic>);
     } catch (err) {
       return null;

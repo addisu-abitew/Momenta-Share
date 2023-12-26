@@ -2,11 +2,13 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:momenta_share/providers/UserProvider.dart';
 // import 'package:momenta_share/pages/HomeScreen.dart';
 import 'package:momenta_share/services/AuthMethods.dart';
 import 'package:momenta_share/utils/pickImage.dart';
 import 'package:momenta_share/widgets/CustomButton.dart';
 import 'package:momenta_share/widgets/CustomTextField.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -53,6 +55,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
     if (res == null) {
       Navigator.of(context).pop();
+      Provider.of<UserProvider>(context).refreshUser();
       // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res)));
@@ -80,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset('assets/images/momenta_logo.png', height: width*0.2, fit: BoxFit.contain),
-                    Text("MomentaShare", style: TextStyle(fontFamily: 'OleoScript', fontSize: width*0.1125, color: Colors.white)),
+                    Text("MomentaShare", style: TextStyle(fontFamily: 'OleoScript', fontSize: width*0.1, color: Colors.white)),
                   ],
                 ),
                 SizedBox(height: width*0.05),

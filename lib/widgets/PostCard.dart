@@ -18,6 +18,24 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
   TextEditingController commentController = TextEditingController();
+  String? userPhotoUrl;
+  String username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    setUserData();
+  }
+
+  setUserData() async {
+    final user = await FirestoreMethods.getUserData(widget.post.uid);
+    if (user != null) {
+      setState(() {
+        userPhotoUrl = user.photoUrl;
+        username = user.username;
+      });
+    }
+  }
 
   showDeleteDialog() {
     showDialog(
@@ -53,6 +71,7 @@ class _PostCardState extends State<PostCard> {
     final now = DateTime.now();
     final double width = MediaQuery.sizeOf(context).width > 600 ? 600 : MediaQuery.sizeOf(context).width;
     final uid = Provider.of<UserProvider>(context, listen: false).user?.uid;
+    
 
     if (uid == null) {
       return Container();
@@ -66,13 +85,13 @@ class _PostCardState extends State<PostCard> {
             children: [
               CircleAvatar(
                 radius: width * 0.05,
-                backgroundImage: NetworkImage(widget.post.userPhotoUrl),
+                backgroundImage: userPhotoUrl==null ? AssetImage('assets/images/profile_icon.jpg') : NetworkImage(userPhotoUrl!) as ImageProvider,
               ),
               SizedBox(width: width * 0.02),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.post.username, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(username, style: const TextStyle(fontWeight: FontWeight.bold)),
                   Text(timeago.format(now.subtract(now.difference(widget.post.createdAt))), style: const TextStyle(color: Colors.grey)),
                 ],
               ),

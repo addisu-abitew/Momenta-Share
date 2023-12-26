@@ -6,6 +6,7 @@ import 'package:momenta_share/models/UserModel.dart';
 import 'package:momenta_share/providers/UserProvider.dart';
 import 'package:momenta_share/services/FirestoreMethods.dart';
 import 'package:momenta_share/utils/pickImage.dart';
+import 'package:momenta_share/widgets/CustomAppBar.dart';
 import 'package:momenta_share/widgets/CustomButton.dart';
 import 'package:provider/provider.dart';
 
@@ -104,21 +105,8 @@ class _PostMomentState extends State<PostMoment> {
     final double width = MediaQuery.of(context).size.width > 600 ? 600 : MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              Image.asset('assets/images/momenta_logo.png', width: width*0.1075),
-              SizedBox(width: width*0.025),
-              Text('MomentaShare', style: TextStyle(fontFamily: 'OleoScript', fontSize: width*0.0875))
-            ],
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size(double.infinity, width*0.005),
-            child: Container(
-              color: Colors.grey,
-              height: width*0.005,
-            ),
-          ),
+        appBar: CustomAppBar(
+          titleWidget: Text('Post Moment', style: TextStyle(fontFamily: 'Kalnia', fontSize: width*0.075)),
         ),
         body: SingleChildScrollView(
           child: Container(

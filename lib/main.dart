@@ -5,7 +5,6 @@ import 'package:momenta_share/firebase_options.dart';
 import 'package:momenta_share/pages/HomeScreen.dart';
 import 'package:momenta_share/pages/LoginScreen.dart';
 import 'package:momenta_share/providers/UserProvider.dart';
-import 'package:momenta_share/services/AuthMethods.dart';
 import 'package:momenta_share/utils/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // AuthMethods.signOut(); 
+  // AuthMethods.signOut();
   runApp(const MainApp());
 }
 
@@ -42,7 +41,8 @@ class MainApp extends StatelessWidget {
                   background: Colors.black,
                   onBackground: Colors.white,
                   surface: Colors.black,
-                  onSurface: Colors.white),
+                  onSurface: Colors.white
+              ),
               elevatedButtonTheme: ElevatedButtonThemeData(
                   style: ButtonStyle(
                 elevation: const MaterialStatePropertyAll(5),

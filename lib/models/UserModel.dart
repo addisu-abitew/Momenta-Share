@@ -12,7 +12,7 @@ class UserModel {
   final List<String> posts;
   final List<String> likedPosts;
 
-  UserModel({
+  const UserModel({
     required this.uid,
     required this.username,
     required this.email,
@@ -39,7 +39,7 @@ class UserModel {
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
+    UserModel user = UserModel(
       uid: map['uid'] as String,
       username: map['username'] as String,
       email: map['email'] as String,
@@ -50,6 +50,7 @@ class UserModel {
       posts: List<String>.from(map['posts'] as List<dynamic>),
       likedPosts: List<String>.from(map['likedPosts'] as List<dynamic>),
     );
+    return user;
   }
 
   String toJson() => json.encode(toMap());

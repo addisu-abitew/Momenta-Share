@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:momenta_share/models/PostModel.dart';
 import 'package:momenta_share/models/UserModel.dart';
 import 'package:momenta_share/providers/UserProvider.dart';
+import 'package:momenta_share/services/AuthMethods.dart';
+import 'package:momenta_share/services/FirestoreMethods.dart';
+import 'package:momenta_share/widgets/CustomAppBar.dart';
 import 'package:momenta_share/widgets/PostCard.dart';
 import 'package:momenta_share/widgets/ProfileEditorDialog.dart';
 import 'package:provider/provider.dart';
@@ -16,39 +19,30 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  
   @override
   Widget build(BuildContext context) {
-    final UserModel? user = widget.user ?? Provider.of<UserProvider>(context).user;
-    if (user == null) {
+    UserModel? displayedUser = widget.user ?? Provider.of<UserProvider>(context).user;
+    final double width = MediaQuery.of(context).size.width > 600 ? 600 : MediaQuery.of(context).size.width;
+
+    if (displayedUser == null) {
       return const Center(child: CircularProgressIndicator());
     }
-    final double width = MediaQuery.of(context).size.width > 600 ? 600 : MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              Image.asset('assets/images/momenta_logo.png', width: width*0.1075),
-              SizedBox(width: width*0.025),
-              Text('MomentaShare', style: TextStyle(fontFamily: 'OleoScript', fontSize: width*0.0875))
-            ],
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size(double.infinity, width*0.005),
-            child: Container(
-              color: Colors.grey,
-              height: width*0.005,
+        appBar: widget.user==null
+            ? CustomAppBar(titleWidget: Text('MomentaShare', style: TextStyle(fontFamily: 'OleoScript', fontSize: width*0.0875)))
+            : AppBar(
+              title: Text("User Profile", style: TextStyle(fontWeight: FontWeight.bold, fontSize: width*0.05)),
+              centerTitle: true,
             ),
-          ),
-        ),
         body: Container(
           padding: EdgeInsets.all(width*0.0125),
           child: Column(
             children: [
               StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('users').doc(user.uid).snapshots(),
+                stream: FirebaseFirestore.instance.collection('users').doc(displayedUser.uid).snapshots(),
                 builder: (context, snapshot) {
+                  bool followed = snapshot.hasData && snapshot.data!['followers'].contains(Provider.of<UserProvider>(context).user!.uid);
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasData) {
@@ -70,15 +64,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ],
                               ),
                             ),
-                            IconButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context, 
-                                  builder: (context) => ProfileEditorDialog(username: user.username, bio: user.bio, photoUrl: user.photoUrl)
-                                );
-                              },
-                              icon: const Icon(Icons.edit)
-                            )
+                            if (widget.user == null)
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context, 
+                                    builder: (context) => ProfileEditorDialog(username: user.username, bio: user.bio, photoUrl: user.photoUrl)
+                                  );
+                                },
+                                icon: const Icon(Icons.edit)
+                              )
                           ],
                         ),
                         SizedBox(height: width*0.05),
@@ -105,6 +100,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
+                        SizedBox(height: width*0.0125),
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: widget.user == null 
+                                ? Colors.red.withOpacity(0.2)
+                                : !followed
+                                    ? Colors.blue
+                                    : Colors.blue.withOpacity(0.2),
+                            border: Border.all(color: widget.user == null 
+                                ? Colors.red
+                                : Colors.blue),
+                            borderRadius: BorderRadius.circular(width*0.025)
+                          ),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                              foregroundColor: MaterialStateProperty.all(
+                                widget.user == null 
+                                  ? Colors.red
+                                  : followed
+                                      ? Colors.blue
+                                      : Colors.white
+                              ),
+                              padding: MaterialStateProperty.all(EdgeInsets.all(width*0.025)),
+                            ),
+                            onPressed: () async {
+                              if (widget.user == null) {
+                                AuthMethods.signOut();
+                              } else {
+                                await FirestoreMethods.followUser(displayedUser.uid);
+                                setState(() {});
+                              }
+                            },
+                            child: Text(
+                              widget.user == null 
+                                ? 'Log out'
+                                : followed
+                                    ? 'Unfollow'
+                                    : 'Follow',
+                              style: TextStyle(fontSize: width*0.05),
+                            )
+                          )
+                        ),
                       ],
                     );
                   } else {
@@ -116,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text('Recent Posts', style: TextStyle(fontSize: width*0.075, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: user.uid).snapshots(),
+                  stream: FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: displayedUser.uid).snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());

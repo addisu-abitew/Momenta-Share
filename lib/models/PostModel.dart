@@ -1,10 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class PostModel {
   final String postId;
   final String uid;
-  final String username;
-  final String userPhotoUrl;
   final String caption;
   final String imageUrl;
   final List<dynamic> likes;
@@ -14,8 +13,6 @@ class PostModel {
   PostModel({
     required this.postId,
     required this.uid,
-    required this.username,
-    required this.userPhotoUrl,
     required this.caption,
     required this.imageUrl,
     required this.likes,
@@ -27,8 +24,6 @@ class PostModel {
     return <String, dynamic>{
       'postId': postId,
       'uid': uid,
-      'username': username,
-      'userPhotoUrl': userPhotoUrl,
       'caption': caption,
       'imageUrl': imageUrl,
       'likes': likes,
@@ -41,8 +36,6 @@ class PostModel {
     return PostModel(
       postId: map['postId'] as String,
       uid: map['uid'] as String,
-      username: map['username'] as String,
-      userPhotoUrl: map['userPhotoUrl'] as String,
       caption: map['caption'] as String,
       imageUrl: map['imageUrl'] as String,
       likes: List<dynamic>.from(map['likes'] as List<dynamic>),

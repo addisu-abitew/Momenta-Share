@@ -36,24 +36,56 @@ class _FavoritePostsScreenState extends State<FavoritePostsScreen> {
         ),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('posts').where('likes', arrayContains: user?.uid).orderBy('createdAt', descending: true).snapshots(),
+        stream: FirebaseFirestore.instance.collection('users').doc(user!.uid).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) {
+            List<dynamic> favorites = snapshot.data!.data()!['likedPosts'];
+            print('fav posts: $favorites');
             return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
+              itemCount: favorites.length,
               itemBuilder: (context, index) {
-                return PostCard(
-                  post: PostModel.fromMap(snapshot.data!.docs[index].data()),
+                return StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection('posts').doc(favorites[index]).snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasData) {
+                      return PostCard(
+                        post: PostModel.fromMap(snapshot.data!.data()!),
+                      );
+                    } else {
+                      return const Center(child: Text('No favorite posts'));
+                    }
+                  },
                 );
               },
             );
           } else {
-            return const Center(child: Text('No posts'));
+            return const Center(child: Text('No favorite posts'));
           }
         },
-      )
+      ),
+      // body: StreamBuilder(
+      //   stream: FirebaseFirestore.instance.collection('posts').where('likes', arrayContains: user!.uid).snapshots(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return const Center(child: CircularProgressIndicator());
+      //     } else if (snapshot.hasData) {
+      //       return ListView.builder(
+      //         itemCount: snapshot.data!.docs.length,
+      //         itemBuilder: (context, index) {
+      //           return PostCard(
+      //             post: PostModel.fromMap(snapshot.data!.docs[index].data()),
+      //           );
+      //         },
+      //       );
+      //     } else {
+      //       return const Center(child: Text('No favorite posts'));
+      //     }
+      //   },
+      // )
     );
   }
 }

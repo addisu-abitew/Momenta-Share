@@ -60,15 +60,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomTextField(label: 'Password', keyboardType: TextInputType.text, isObsecured: true, controller: passwordController),
                 SizedBox(height: width*0.1),
                 CustomButton(label: 'Login', onPressed: loginUser, isLoading: isLoading),
-                SizedBox(height: width*0.15),
+                SizedBox(height: width*0.05),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("Don't have an account?", style: TextStyle(fontSize: width*0.05),),
+                    Text("Don't have an account?", style: TextStyle(fontSize: width*0.04),),
                     TextButton(
                       onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignUpScreen())), 
-                      child: Text('Sign Up', style: TextStyle(fontSize: width*0.05, fontWeight: FontWeight.bold, color: Colors.white)),
+                      child: Text('Sign Up', style: TextStyle(fontSize: width*0.04, fontWeight: FontWeight.bold, color: Colors.white)),
                     )
                   ],
                 )

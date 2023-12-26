@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.access_network_state" />
     <application
         android:label="MomentaShare"
         android:name="${applicationName}"

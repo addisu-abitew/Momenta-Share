@@ -15,8 +15,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int currentIndex = 2;
-  PageController pageController = PageController(initialPage: 2);
+  int currentIndex = 0;
+  PageController pageController = PageController(initialPage: 0);
 
   changePage(int index) {
     setState(() {
@@ -35,7 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: PageView(
+        body: Provider.of<UserProvider>(context).user == null
+          ? const Center(child: CircularProgressIndicator())
+          : PageView(
           controller: pageController,
           onPageChanged: changePage,
           children: const [
