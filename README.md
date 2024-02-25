@@ -23,11 +23,11 @@ Momenta Share is a social media application inspired by Instagram. It allows use
 
 To run the Momenta Share application locally, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/abitewaddisu/Momenta-Share.git`
-2. Install Flutter and set up your development environment: [Flutter Installation Guide](https://flutter.dev/docs/get-started/install)
-3. Configure Firebase for the project:
+1. Clone the repository: `git clone https://github.com/addisu-abitew/Momenta-Share.git`
+3. Install Flutter and set up your development environment: [Flutter Installation Guide](https://flutter.dev/docs/get-started/install)
+4. Configure Firebase for the project:
    - Create a new Firebase project at [https://firebase.google.com/](https://firebase.google.com/).
    - Set up Firebase Authentication, Firestore, Cloud Storage, and Cloud Messaging for the project.
    - Download the Firebase configuration file (google-services.json) and place it in the appropriate location in your Flutter project.
-4. Install project dependencies: `flutter pub get`
-5. Start the application: `flutter run`
+5. Install project dependencies: `flutter pub get`
+6. Start the application: `flutter run`
